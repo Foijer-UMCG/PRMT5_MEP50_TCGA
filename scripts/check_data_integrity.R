@@ -11,9 +11,22 @@ data_dirs <- list.dirs(file.path(here::here(),
                                  "data"),
                        recursive = FALSE)
 
+# force recalculating aneuploidy, even if file is already present
+force = FALSE
+
 for (dir in data_dirs) {
-  if (grepl("TARGET-AML", dir)){
-    print("TARGET-AML detected - need some other considerations for data processing.
+  # this doesn't seem to work for some reason
+  if(file.exists(file.path(dir,
+                           "filtered_data.Rds")) &
+     !force){
+    dataset <- basename(dir)
+    cat("Dataset", dataset,  "has already been processed, skipping to next\n")
+    next
+  }
+
+
+  if (grepl("TARGET-", dir)){
+    print("TARGET detected - need some other considerations for data processing.
           Setting flags to ensure proper functioning.")
     grep = TRUE
     matching_string <- "Primary Blood Derived Cancer"

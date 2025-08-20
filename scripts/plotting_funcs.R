@@ -44,6 +44,10 @@ plot_exp_boxplots <- function(data, gene, plot_name, cancer_type){
 }
 
 plot_genes <- function(data, gene1, gene2, plot_name, cancer_type){
+  my_lims <- range(c(filtered_data[[gene1]],
+                     filtered_data[[gene2]]),
+                   na.rm = TRUE)
+  print(my_lims)
   p <- ggpubr::ggscatter(data,
                          x = gene1,
                          y = gene2,
@@ -55,11 +59,15 @@ plot_genes <- function(data, gene1, gene2, plot_name, cancer_type){
                          add.params = list(color = "red"),
                          title = sprintf("%s expression against %s expression, %s", gene1, gene2, cancer_type),
                          xlab = sprintf("%s (FPKM)", gene1),
-                         ylab = sprintf("%s (FPKM)", gene2))
+                         ylab = sprintf("%s (FPKM)", gene2)) +
+    # locks the plot to 1:1 axis scaling
+    ggplot2::coord_cartesian(xlim = my_lims,
+                             ylim = my_lims)
+
   ggplot2::ggsave(filename = plot_name,
                   plot = p,
                   unit = "in",
-                  width = 14,
+                  width = 7,
                   height = 7,
                   create.dir = T)
 }

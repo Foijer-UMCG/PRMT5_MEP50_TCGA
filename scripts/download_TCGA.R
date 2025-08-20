@@ -1,10 +1,19 @@
 rm(list = ls())
 here::i_am("scripts/download_TCGA.R")
 
-projects_wanted <- c("TARGET-AML",
-                     "TCGA-LUAD",
-                     "TCGA-BRCA",
-                     "TCGA-COAD")
+# comment out all the projects that are already downloaded,
+# otherwise they will be downloaded again!
+projects_wanted <- c(
+  "TARGET-ALL-P1",
+  "TARGET-ALL-P2"
+#  "TCGA-PRAD",
+#  "TCGA-HNSC",
+#  "TCGA-SKCM"
+#  "TARGET-AML",
+#  "TCGA-LUAD",
+#  "TCGA-BRCA",
+#  "TCGA-COAD"
+)
 
 for (project in projects_wanted){
   project_dir <- file.path(here::here(),

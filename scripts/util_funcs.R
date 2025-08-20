@@ -28,7 +28,10 @@ load_CNV <- function(filepath){
 }
 
 
-calc_aneuploidy <- function(seg_means, lengths, rounded = FALSE, base_ploidy = 2) {
+calc_aneuploidy <- function(seg_means,
+                            lengths,
+                            rounded = FALSE,
+                            base_ploidy = 2) {
   # converts the seg means to copy numbers
   CN <- (2^seg_means) * 2
 

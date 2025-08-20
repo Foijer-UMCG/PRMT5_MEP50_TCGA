@@ -1,6 +1,6 @@
-data/*
+data/*/Copy_Number_Variation
+data/*/Transcriptome_Profiling
 renv
-plots
 .Rhistory
 .Rprofile
 .Rproj.user

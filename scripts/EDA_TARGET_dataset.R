@@ -44,7 +44,6 @@ primary_CNV_paths <- check_data_presence(dataframe = CNV_info,
                                                        "Copy_Number_Segment"),
                                  col_name = "path",
                                  grep = TRUE)
-primary_trascriptome_presence <-
 
 # calculates the aneuploidy for each sample in the CNV dataset
 aneuploidy_scores <- purrr::map_dbl(CNV_paths$path, function(path) {

@@ -6,38 +6,62 @@ source(file.path(here::here(),
 source(file.path(here::here(),
                  "scripts/plotting_funcs.R"))
 
-
 data_dirs <- list.dirs(file.path(here::here(),
                                  "data"),
                        recursive = FALSE)
 
+# forces a reload of the PRMT5 & WDR77 expression data if TRUE
+force = FALSE
+
+# this takes some time to run completely since we have to fetch the data
+# from separate files - think ~10 minutes per 1000 samples
 for (dir in data_dirs) {
+  # if (grepl(pattern = "TARGET-",
+  #           dir)){
+  #   print("Skipping bad data from plotting")
+  #   next
+  # }
+
+
   # if (grepl("TARGET-AML", dir)){
   #   print("TARGET-AML detected - need some other considerations for data processing")
   #   next
   # }
-  if (!(grepl("TARGET-AML", dir))){
-    next
-  }
+  # if (!(grepl("TARGET-AML", dir))){
+  #   next
+  # }
 
   # reads the pre-filtered dataset
   filtered_data <- readRDS(file.path(dir, "filtered_data.Rds"))
 
-  # extracts both PRMT5 & WDR77 expression
-  PRMT5_expression <- purrr::map_dbl(filtered_data$RNA_path, function(path) {
-    exp_data <- load_transcriptome(path)
-    exp_data[exp_data$gene_name == "PRMT5", ]$fpkm_unstranded
-  },
-  .progress = "PRMT5_exp_extraction")
+  if (file.exists(file.path(dir,
+                            "expression_data.Rds")) &
+      !force){
+    filtered_data <- readRDS(file.path(dir,
+                      "expression_data.Rds"))
 
-  WDR77_expression <- purrr::map_dbl(filtered_data$RNA_path, function(path) {
-    exp_data <- load_transcriptome(path)
-    exp_data[exp_data$gene_name == "WDR77", ]$fpkm_unstranded
-  },
-  .progress = "WDR77_exp_extraction")
+  }else{
+    # extracts both PRMT5 & WDR77 expression
+    PRMT5_expression <- purrr::map_dbl(filtered_data$RNA_path, function(path) {
+      exp_data <- load_transcriptome(path)
+      exp_data[exp_data$gene_name == "PRMT5", ]$fpkm_unstranded
+    },
+    .progress = "PRMT5_exp_extraction")
 
-  filtered_data$PRMT5 <- PRMT5_expression
-  filtered_data$WDR77 <- WDR77_expression
+    MEP50_expression <- purrr::map_dbl(filtered_data$RNA_path, function(path) {
+      exp_data <- load_transcriptome(path)
+      # gene name is WDR77, not MEP50 - named MEP50 in article so taking that name
+      exp_data[exp_data$gene_name == "WDR77", ]$fpkm_unstranded
+    },
+    .progress = "MEP50_exp_extraction")
+
+    filtered_data$PRMT5 <- PRMT5_expression
+    filtered_data$MEP50 <- MEP50_expression
+
+    saveRDS(object = filtered_data,
+            file = file.path(dir,
+                             "expression_data.Rds"))
+  }
 
   # defines the aneu_division
   q <- stats::quantile(filtered_data$aneuploidy,
@@ -56,9 +80,10 @@ for (dir in data_dirs) {
                         "plots",
                         cancer_type)
   dir.create(plot_dir,
-             recursive = TRUE)
+             recursive = TRUE,
+             showWarnings = FALSE)
 
-  for (gene in c("PRMT5", "WDR77")){
+  for (gene in c("PRMT5", "MEP50")){
     # makes the density plots and saves them - see plotting_funcs.R for details
     plot_gene_distro(data = filtered_data,
                      gene = gene,
@@ -91,9 +116,9 @@ for (dir in data_dirs) {
   # finally the PRMT5 vs. WDR77 expression - bit more hardcoded than the rest
   plot_genes(filtered_data,
              gene1 = "PRMT5",
-             gene2 = "WDR77",
+             gene2 = "MEP50",
              cancer_type = cancer_type,
              plot_name = file.path(plot_dir,
-                                   sprintf("PRMT5_WDR77_corr_%s.pdf", cancer_type)))
+                                   sprintf("PRMT5_MEP50_corr_%s.pdf", cancer_type)))
   sprintf("Finished plotting of %s", cancer_type)
 }
