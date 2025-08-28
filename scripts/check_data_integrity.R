@@ -22,6 +22,8 @@ for (dir in data_dirs) {
     dataset <- basename(dir)
     cat("Dataset", dataset,  "has already been processed, skipping to next\n")
     next
+  }else{
+    cat("Processing...")
   }
 
 
@@ -30,6 +32,10 @@ for (dir in data_dirs) {
           Setting flags to ensure proper functioning.")
     grep = TRUE
     matching_string <- "Primary Blood Derived Cancer"
+  }else if (grepl("MP2PRT", dir)) {
+    print("MP2PRT detected - changing some matching strings.")
+    grep = TRUE
+    matching_string <- "^Blood Derived Cancer - Bone Marrow"
   }else{
     print("Normal TCGA dataset detected, setting normal flags.")
     grep = FALSE

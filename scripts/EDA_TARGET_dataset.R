@@ -60,3 +60,30 @@ filtered_data <- readRDS(file.path(here::here(),
                   "data",
                   "TARGET-AML",
                   "filtered_data.Rds"))
+
+# in 3 datasets we only get 92 samples - where are we losing them all?
+# start by checking how many CNV profiles we get per dataset
+rm(list = ls())
+all_datasets <- list.dirs(file.path(here::here(),
+                                     "data"),
+                           recursive = FALSE)
+hema_datasets <- grep(pattern = "TARGET-|MP2PRT",
+                       all_datasets,
+                       value = T)
+
+for (path in hema_datasets){
+  clinical_info <- readRDS(file.path(path,
+                                     "clinical.Rds"))
+  # print the number of files, can find this in the manifest maybe?
+  CNV_query <- readRDS(file.path(path, "CNV_query.Rds"))[[1]][[1]]
+  print(dim(CNV_query))
+}
+hema_datasets[1]
+
+
+# Checking how the data filtering on MP2PRT went
+rm(list = ls())
+MP2PRT_data <- readRDS(file.path(here::here(),
+                                 "data",
+                                 "MP2PRT-ALL",
+                                 "filtered_data.Rds"))

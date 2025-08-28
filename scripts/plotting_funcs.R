@@ -1,4 +1,4 @@
-plot_gene_distro <- function(data, gene, plot_name, cancer_type){
+plot_gene_distro <- function(data, gene, plot_name, cancer_type, return = FALSE){
   p <- ggpubr::ggdensity(data,
                     x = gene,
                     add = "mean",
@@ -9,17 +9,19 @@ plot_gene_distro <- function(data, gene, plot_name, cancer_type){
     ggplot2::labs(title = sprintf("%s expression distribution per aneu classification, %s", gene, cancer_type),
                   y = "Density",
                   x = sprintf("%s expression (FKPM)", gene))
-
-  ggplot2::ggsave(filename = plot_name,
-                  plot = p,
-                  unit = "in",
-                  width = 14,
-                  height = 7,
-                  create.dir = T)
-
+  if (return){
+    return(p)
+  }else{
+    ggplot2::ggsave(filename = plot_name,
+                    plot = p,
+                    unit = "in",
+                    width = 14,
+                    height = 7,
+                    create.dir = T)
+  }
 }
 
-plot_exp_boxplots <- function(data, gene, plot_name, cancer_type){
+plot_exp_boxplots <- function(data, gene, plot_name, cancer_type, return = FALSE){
   comparisons <- list(c("low", "middle"),
                       c("low", "high"),
                       c("middle", "high"))
@@ -35,20 +37,24 @@ plot_exp_boxplots <- function(data, gene, plot_name, cancer_type){
     ggpubr::stat_compare_means(label.y = 50) +
     ggplot2::theme(text = ggplot2::element_text(size = 20))
 
-  ggplot2::ggsave(filename = plot_name,
+  if (return){
+    return(p)
+  }else{
+    ggplot2::ggsave(filename = plot_name,
                   plot = p,
                   unit = "in",
                   width = 14,
                   height = 7,
                   create.dir = T)
+  }
 }
 
-plot_genes <- function(data, gene1, gene2, plot_name, cancer_type){
-  my_lims <- range(c(filtered_data[[gene1]],
-                     filtered_data[[gene2]]),
+plot_genes <- function(df, gene1, gene2, plot_name, cancer_type, return = FALSE){
+  my_lims <- range(c(df[[gene1]],
+                     df[[gene2]]),
                    na.rm = TRUE)
-  print(my_lims)
-  p <- ggpubr::ggscatter(data,
+
+  p <- ggpubr::ggscatter(df,
                          x = gene1,
                          y = gene2,
                          color = "#1E88E5",
@@ -64,15 +70,19 @@ plot_genes <- function(data, gene1, gene2, plot_name, cancer_type){
     ggplot2::coord_cartesian(xlim = my_lims,
                              ylim = my_lims)
 
-  ggplot2::ggsave(filename = plot_name,
-                  plot = p,
-                  unit = "in",
-                  width = 7,
-                  height = 7,
-                  create.dir = T)
+  if (return){
+    return(p)
+  }else{
+    ggplot2::ggsave(filename = plot_name,
+                    plot = p,
+                    unit = "in",
+                    width = 7,
+                    height = 7,
+                    create.dir = T)
+  }
 }
 
-plot_aneu_gene_scatter <- function(data, gene, aneuploidy, plot_name, cancer_type){
+plot_aneu_gene_scatter <- function(data, gene, aneuploidy, plot_name, cancer_type, return = FALSE){
   p <- ggpubr::ggscatter(data,
                          x = aneuploidy,
                          xlab = "Aneuploidy score",
@@ -88,10 +98,14 @@ plot_aneu_gene_scatter <- function(data, gene, aneuploidy, plot_name, cancer_typ
                          add.params = list(color = "red")) +
     ggplot2::theme(text = ggplot2::element_text(size = 20))
 
-  ggplot2::ggsave(filename = plot_name,
-                  plot = p,
-                  unit = "in",
-                  width = 7,
-                  height = 7,
-                  create.dir = T)
+  if (return){
+    return(p)
+  }else{
+    ggplot2::ggsave(filename = plot_name,
+                    plot = p,
+                    unit = "in",
+                    width = 7,
+                    height = 7,
+                    create.dir = T)
+  }
 }

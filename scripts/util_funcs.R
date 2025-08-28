@@ -1,7 +1,12 @@
 library(dplyr)
 
 get_GDC_idents <- function(x){
-  ident <- strsplit(x, split = "-")[[1]][3]
+  # for some reasons the MP2PRT have the ID in the second slot
+  if (grepl(pattern = "MP2PRT", x)){
+    ident <- strsplit(x, split = "-")[[1]][2]
+  }else{
+    ident <- strsplit(x, split = "-")[[1]][3]
+  }
   return(ident)
 }
 

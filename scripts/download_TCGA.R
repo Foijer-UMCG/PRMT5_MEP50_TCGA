@@ -4,8 +4,9 @@ here::i_am("scripts/download_TCGA.R")
 # comment out all the projects that are already downloaded,
 # otherwise they will be downloaded again!
 projects_wanted <- c(
-  "TARGET-ALL-P1",
-  "TARGET-ALL-P2"
+  "MP2PRT-ALL"
+#  "TARGET-ALL-P1",
+#  "TARGET-ALL-P2",
 #  "TCGA-PRAD",
 #  "TCGA-HNSC",
 #  "TCGA-SKCM"
