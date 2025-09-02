@@ -5,4 +5,4 @@ on:
 
 jobs:
   use-org-workflow:
-    uses: Foijer-UMCG/.github/workflows/auto-assign.yml@main
+    uses: Foijer-UMCG/.github/.github/workflows/auto-assign.yml@main
