@@ -6,3 +6,5 @@ on:
 jobs:
   use-org-workflow:
     uses: Foijer-UMCG/.github/.github/workflows/auto-assign.yml@main
+    with:
+      github-token: ${{ secrets.PAT_TOKEN }}
