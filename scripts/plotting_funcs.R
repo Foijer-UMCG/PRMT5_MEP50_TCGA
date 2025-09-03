@@ -11,7 +11,9 @@ plot_gene_distro <- function(data, gene, plot_name = FALSE, cancer_type, return 
       title = sprintf("%s expression distribution per aneu classification, %s", gene, cancer_type),
       y = "Density",
       x = sprintf("%s expression (FKPM)", gene)
-    )
+    ) +
+    ggplot2::theme(axis.text = ggplot2::element_text(size = 20),
+                   axis.title = ggplot2::element_text(size = 20))
 
   if (return) {
     return(p)
@@ -51,7 +53,8 @@ plot_exp_boxplots <- function(data, gene, plot_name = FALSE, cancer_type, return
       label = "p.signif"
     ) +
     ggpubr::stat_compare_means(label.y = 50) +
-    ggplot2::theme(text = ggplot2::element_text(size = 20))
+    ggplot2::theme(text = ggplot2::element_text(size = 20),
+                   axis.title = ggplot2::element_text(size = 20))
 
   if (return) {
     return(p)
@@ -100,7 +103,9 @@ plot_genes <- function(df, gene1, gene2, plot_name = FALSE, cancer_type, return 
     ggplot2::coord_cartesian(
       xlim = my_lims,
       ylim = my_lims
-    )
+    ) +
+    ggplot2::theme(axis.text = ggplot2::element_text(size = 20),
+                   axis.title = ggplot2::element_text(size = 20))
 
 
   if (return) {
@@ -141,7 +146,8 @@ plot_aneu_gene_scatter <- function(data, gene, aneuploidy, plot_name = FALSE, ca
     cor.coeff.args = list(method = "pearson"),
     add.params = list(color = "red")
   ) +
-    ggplot2::theme(text = ggplot2::element_text(size = 20))
+    ggplot2::theme(axis.text = ggplot2::element_text(size = 20),
+                   axis.title = ggplot2::element_text(size = 20))
 
   if (return) {
     return(p)
