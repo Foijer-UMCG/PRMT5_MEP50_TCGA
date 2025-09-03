@@ -19,7 +19,7 @@ load_and_tag <- function(dir) {
 
   df <- readRDS(file)
   # classify type by directory name
-  dataset_type <- ifelse(grepl("TARGET|MP2PRT", dir), "hematological", "solid")
+  dataset_type <- ifelse(grepl("TARGET|MP2PRT|MMRF", dir), "hematological", "solid")
 
   # add metadata columns
   df$dataset_dir  <- basename(dir)

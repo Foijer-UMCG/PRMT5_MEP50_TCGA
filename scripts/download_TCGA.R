@@ -4,19 +4,22 @@ here::i_am("scripts/download_TCGA.R")
 # comment out the projects you don't want to download
 # there's a check in place to prevent double downloading
 projects_wanted <- c(
-  "MP2PRT-ALL",
-  "TARGET-ALL-P1",
-  "TARGET-ALL-P2",
-  "TCGA-PRAD",
-  "TCGA-HNSC",
-  "TCGA-SKCM",
-  "TARGET-AML",
-  "TCGA-LUAD",
-  "TCGA-BRCA",
-  "TCGA-COAD"
+#  "MP2PRT-ALL",
+#  "TARGET-ALL-P1",
+#  "TARGET-ALL-P2",
+#  "TCGA-PRAD",
+#  "TCGA-HNSC",
+#  "TCGA-SKCM",
+#  "TARGET-AML",
+#  "TCGA-LUAD",
+#  "TCGA-BRCA",
+#  "TCGA-COAD",
+  "MMRF-COMMPASS"
 )
 
+# Change this is you want to redownload the datasets
 force = FALSE
+
 for (project in projects_wanted){
   project_dir <- file.path(here::here(),
                            "data")
@@ -50,7 +53,7 @@ for (project in projects_wanted){
                              "transcriptome_query.Rds"))
   }
 
-  # clinical information, small so no extra checks
+  # clinical information, very small so no extra checks for redundancy
   clinical_data <- TCGA_BRCA_clinical <- TCGAbiolinks::GDCquery_clinic(
     project = project,
     type = "clinical",
@@ -68,7 +71,7 @@ for (project in projects_wanted){
 
   # only downloads if the directory doesn't exist or forced
   if ( !(dir.exists(dest_dir)) | force){
-    # and finally the copy number information
+    # copy number information
     query_CNV <- TCGAbiolinks::GDCquery(
       project = project,
       data.category = "Copy Number Variation",
@@ -94,6 +97,8 @@ for (project in projects_wanted){
 
   # only downloads if the directory doesn't exist or forced
   if (!(dir.exists(dest_dir)) || force) {
+    # the protein data doesn't always exist, tryCatch for
+    # preventing crashing. Might be a better way but this works
     tryCatch({
       query_protein <- TCGAbiolinks::GDCquery(
         project = project,

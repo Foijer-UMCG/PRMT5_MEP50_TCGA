@@ -16,21 +16,6 @@ force = FALSE
 # this takes some time to run completely since we have to fetch the data
 # from separate files - think ~10 minutes per 1000 samples
 for (dir in data_dirs) {
-  # if (grepl(pattern = "TARGET-",
-  #           dir)){
-  #   print("Skipping bad data from plotting")
-  #   next
-  # }
-
-
-  # if (grepl("TARGET-AML", dir)){
-  #   print("TARGET-AML detected - need some other considerations for data processing")
-  #   next
-  # }
-  # if (!(grepl("TARGET-AML", dir))){
-  #   next
-  # }
-
   # reads the pre-filtered dataset
   filtered_data <- readRDS(file.path(dir, "filtered_data.Rds"))
 

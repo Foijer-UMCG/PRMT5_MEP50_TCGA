@@ -26,19 +26,23 @@ for (dir in data_dirs) {
     cat("Processing...")
   }
 
-
+  # should use glue:: and not print
   if (grepl("TARGET-", dir)){
     print("TARGET detected - need some other considerations for data processing.
           Setting flags to ensure proper functioning.")
-    grep = TRUE
+    grep <- TRUE
     matching_string <- "Primary Blood Derived Cancer"
   }else if (grepl("MP2PRT", dir)) {
     print("MP2PRT detected - changing some matching strings.")
-    grep = TRUE
+    grep <- TRUE
     matching_string <- "^Blood Derived Cancer - Bone Marrow"
+  }else if (grepl("MMRF", dir)){
+    print("MMRF detected - changing some matching strings.")
+    grep <- TRUE
+    matching_string <- "^Primary Blood Derived Cancer"
   }else{
     print("Normal TCGA dataset detected, setting normal flags.")
-    grep = FALSE
+    grep <- FALSE
     matching_string <- "Primary Tumor"
   }
 
